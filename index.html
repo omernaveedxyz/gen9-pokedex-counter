@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Pokedex Tracker</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="description" content="Gen 9 pokedex tracker" />
+        <style>
+#btns {
+    display: flex;
+    grid-gap: 12px;
+    align-items: center;
+}
+
+label {
+    font-weight: bold;
+}
+
+label:hover {
+    cursor: pointer;
+    border-bottom: 1px solid black;
+}
+
+img {
+    width: 64px;
+    height: 64px;
+}
+
+.selected {
+    background-color: black;
+}
+        </style>
+    </head>
+    <body>
+        <div id="btns">
+            <label id="exportBtn">Export</label>
+            <h1>/</h1>
+            <label id="importBtn" for="file">Import</label>
+            <input style="display: none" type="file" id="file" accept="text/html">
+        </div>
+        <div id="pokemon"></div>
+    </body>
+    <script>
+        document.querySelector("#exportBtn").addEventListener("click", () => {
+            const a = document.createElement("a");
+            const file = new Blob([document.querySelector("#pokemon").outerHTML], {type: "text/html"});
+
+            a.href = URL.createObjectURL(file);
+            a.download = "pokemon.html";
+            a.click();
+
+            URL.revokeObjectURL(a.href);
+        });
+
+        document.querySelector("#file").addEventListener("input", (e) => {
+            let reader = new FileReader();
+            reader.addEventListener("load", (file) => {
+                document.querySelector("#pokemon").outerHTML = file.target.result;
+                for (var i = 0; i < document.querySelector("#pokemon").getElementsByTagName("*").length; i++) {
+                    const img = document.querySelector("#pokemon").getElementsByTagName("*")[i];
+                    img.addEventListener("click", () => {
+                        if (img.style.backgroundColor === "black") {
+                            img.style = "background-color: red";
+                        } else if (img.style.backgroundColor === "blue") {
+                            img.style = "background-color: none";
+                        } else {
+                            img.style = "background-color: black";
+                        };
+                    });
+                    img.addEventListener("contextmenu", () => {
+                        if (img.style.backgroundColor === "red") {
+                            img.style = "background-color: black";
+                        } else if (img.style.backgroundColor === "black") {
+                            img.style = "background-color: none";
+                        } else {
+                            img.style = "background-color: blue";
+                        };
+                        event.preventDefault();
+                    });
+                };
+            });
+            reader.readAsText(e.target.files[0]);
+        });
+
+        for (var i = 1010; i < 1113; i++) {
+            const img = document.createElement("img");
+            img.src = `./sprites/pm${i}_00_00_00_big.png`;
+            img.addEventListener("click", () => {
+                if (img.style.backgroundColor === "black") {
+                    img.style = "background-color: red";
+                } else if (img.style.backgroundColor === "blue") {
+                    img.style = "background-color: none";
+                } else {
+                    img.style = "background-color: black";
+                };
+            });
+            img.addEventListener("contextmenu", () => {
+                if (img.style.backgroundColor === "red") {
+                    img.style = "background-color: black";
+                } else if (img.style.backgroundColor === "black") {
+                    img.style = "background-color: none";
+                } else {
+                    img.style = "background-color: blue";
+                };
+                event.preventDefault();
+            });
+            document.querySelector("#pokemon").appendChild(img);
+        };
+    </script>
+</html>
