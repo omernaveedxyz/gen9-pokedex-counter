@@ -41,6 +41,28 @@ img {
         <div id="pokemon"></div>
     </body>
     <script>
+        function addEventListeners(img) {
+            img.addEventListener("click", () => {
+                if (img.style.backgroundColor === "black") {
+                    img.style = "background-color: red";
+                } else if (img.style.backgroundColor === "blue") {
+                    img.style = "background-color: none";
+                } else if (img.style.backgroundColor !== "red") {
+                    img.style = "background-color: black";
+                };
+            });
+            img.addEventListener("contextmenu", () => {
+                if (img.style.backgroundColor === "red") {
+                    img.style = "background-color: black";
+                } else if (img.style.backgroundColor === "black") {
+                    img.style = "background-color: none";
+                } else {
+                    img.style = "background-color: blue";
+                };
+                event.preventDefault();
+            });
+        };
+
         document.querySelector("#exportBtn").addEventListener("click", () => {
             const a = document.createElement("a");
             const file = new Blob([document.querySelector("#pokemon").outerHTML], {type: "text/html"});
@@ -58,25 +80,7 @@ img {
                 document.querySelector("#pokemon").outerHTML = file.target.result;
                 for (var i = 0; i < document.querySelector("#pokemon").getElementsByTagName("*").length; i++) {
                     const img = document.querySelector("#pokemon").getElementsByTagName("*")[i];
-                    img.addEventListener("click", () => {
-                        if (img.style.backgroundColor === "black") {
-                            img.style = "background-color: red";
-                        } else if (img.style.backgroundColor === "blue") {
-                            img.style = "background-color: none";
-                        } else {
-                            img.style = "background-color: black";
-                        };
-                    });
-                    img.addEventListener("contextmenu", () => {
-                        if (img.style.backgroundColor === "red") {
-                            img.style = "background-color: black";
-                        } else if (img.style.backgroundColor === "black") {
-                            img.style = "background-color: none";
-                        } else {
-                            img.style = "background-color: blue";
-                        };
-                        event.preventDefault();
-                    });
+                    addEventListeners(img);
                 };
             });
             reader.readAsText(e.target.files[0]);
@@ -85,25 +89,7 @@ img {
         for (var i = 1010; i < 1113; i++) {
             const img = document.createElement("img");
             img.src = `./sprites/pm${i}_00_00_00_big.png`;
-            img.addEventListener("click", () => {
-                if (img.style.backgroundColor === "black") {
-                    img.style = "background-color: red";
-                } else if (img.style.backgroundColor === "blue") {
-                    img.style = "background-color: none";
-                } else {
-                    img.style = "background-color: black";
-                };
-            });
-            img.addEventListener("contextmenu", () => {
-                if (img.style.backgroundColor === "red") {
-                    img.style = "background-color: black";
-                } else if (img.style.backgroundColor === "black") {
-                    img.style = "background-color: none";
-                } else {
-                    img.style = "background-color: blue";
-                };
-                event.preventDefault();
-            });
+            addEventListeners(img);
             document.querySelector("#pokemon").appendChild(img);
         };
     </script>
